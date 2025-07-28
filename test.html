@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NightwingRealm - Тест</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #f8fafc;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 600px;
+    }
+    
+    .logo {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+    }
+    
+    .subtitle {
+      font-size: 1.25rem;
+      color: #94a3b8;
+      margin-bottom: 2rem;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 1rem 0;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    
+    .button {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      margin: 0.5rem;
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+    
+    .status {
+      color: #10b981;
+      font-weight: 500;
+    }
+    
+    .error {
+      color: #ef4444;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="logo">NightwingRealm</h1>
+    <p class="subtitle">Славянская RPG в мире Новгорода</p>
+    
+    <div class="card">
+      <h2>Статус приложения</h2>
+      <p>Время загрузки: <span id="time"></span></p>
+      <p>Статус: <span id="status" class="status">Загрузка...</span></p>
+    </div>
+    
+    <div class="card">
+      <h2>Тестирование</h2>
+      <button class="button" onclick="testAPI()">Тест API</button>
+      <button class="button" onclick="testReact()">Тест React</button>
+    </div>
+    
+    <div id="results" class="card" style="display: none;">
+      <h2>Результаты тестов</h2>
+      <div id="results-content"></div>
+    </div>
+  </div>
+
+  <script>
+    // Показываем время загрузки
+    document.getElementById('time').textContent = new Date().toLocaleTimeString();
+    
+    // Проверяем статус
+    setTimeout(() => {
+      document.getElementById('status').textContent = 'Готово';
+    }, 1000);
+    
+    // Тест API
+    async function testAPI() {
+      const resultsDiv = document.getElementById('results');
+      const content = document.getElementById('results-content');
+      
+      resultsDiv.style.display = 'block';
+      content.innerHTML = '<p>Тестирование API...</p>';
+      
+      try {
+        const response = await fetch('http://localhost:3001/api');
+        const data = await response.json();
+        content.innerHTML = `
+          <p class="status">✅ API работает!</p>
+          <p>Версия: ${data.version}</p>
+          <p>Сообщение: ${data.message}</p>
+        `;
+      } catch (error) {
+        content.innerHTML = `
+          <p class="error">❌ Ошибка API: ${error.message}</p>
+          <p>Убедитесь, что сервер запущен на порту 3001</p>
+        `;
+      }
+    }
+    
+    // Тест React
+    function testReact() {
+      const resultsDiv = document.getElementById('results');
+      const content = document.getElementById('results-content');
+      
+      resultsDiv.style.display = 'block';
+      content.innerHTML = `
+        <p class="status">✅ HTML страница работает!</p>
+        <p>Стили загружены</p>
+        <p>JavaScript работает</p>
+        <p>Для полного теста React нужно запустить webpack dev server</p>
+      `;
+    }
+  </script>
+</body>
+</html> 
